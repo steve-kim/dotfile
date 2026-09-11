@@ -4,15 +4,17 @@
 # the pane's cwd changes later (e.g. when Neovim switches worktrees internally).
 
 get_worktrees() {
-  # If inside a git repo, list its worktrees; otherwise find repos under ~/code
-  if git rev-parse --git-dir > /dev/null 2>&1; then
-    git worktree list --porcelain | awk '/^worktree /{print $2}'
+  # Use the calling pane's path (passed as $1) to detect git context — the script
+  # runs from tmux's default dir (~), not the active pane, so $PWD is unreliable.
+  local pane_path="${1:-$PWD}"
+  if git -C "$pane_path" rev-parse --git-dir > /dev/null 2>&1; then
+    git -C "$pane_path" worktree list --porcelain | awk '/^worktree /{print $2}'
   else
     find "${SESSIONIZER_PATH:-$HOME/code}" -maxdepth 3 -name '.git' 2>/dev/null | xargs -I{} dirname {}
   fi
 }
 
-selected=$(get_worktrees | fzf --prompt='worktree> ' --height=40% --reverse)
+selected=$(get_worktrees "$1" | fzf --prompt='worktree> ' --height=40% --reverse)
 [[ -z "$selected" ]] && exit 0
 
 # Find an existing window whose start path matches the selected worktree

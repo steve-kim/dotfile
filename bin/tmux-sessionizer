@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Fuzzy-pick a git worktree and switch to its tmux window, creating one if needed.
+# Matches by window_start_path (set at creation time) which is stable even if
+# the pane's cwd changes later (e.g. when Neovim switches worktrees internally).
+
+get_worktrees() {
+  # If inside a git repo, list its worktrees; otherwise find repos under ~/code
+  if git rev-parse --git-dir > /dev/null 2>&1; then
+    git worktree list --porcelain | awk '/^worktree /{print $2}'
+  else
+    find "${SESSIONIZER_PATH:-$HOME/code}" -maxdepth 3 -name '.git' 2>/dev/null | xargs -I{} dirname {}
+  fi
+}
+
+selected=$(get_worktrees | fzf --prompt='worktree> ' --height=40% --reverse)
+[[ -z "$selected" ]] && exit 0
+
+# Find an existing window whose start path matches the selected worktree
+existing=$(tmux list-windows -F '#{window_index} #{window_start_path}' 2>/dev/null \
+  | awk -v p="$selected" '$2 == p {print $1}')
+
+if [[ -n "$existing" ]]; then
+  tmux select-window -t "$existing"
+else
+  tmux new-window -c "$selected" -n "$(basename "$selected")" 'nvim .'
+fi

@@ -17,3 +17,8 @@ map('n', '<leader>fb', '<Cmd>Telescope buffers<CR>')
 map('n', '<leader>fs', '<Cmd>Telescope lsp_document_symbols<CR>')
 map('n', '<leader>fe', '<Cmd>Telescope file_browser<CR>')
 map('n', '<leader>fk', '<Cmd>Telescope keymaps<CR>')
+
+-- Worktrees
+map('n', '<leader>ww', '<Cmd>Telescope git_worktree git_worktrees<CR>')
+map('n', '<leader>wc', '<Cmd>Telescope git_worktree create_git_worktree<CR>')
+-- <leader>wo registered in worktree.lua

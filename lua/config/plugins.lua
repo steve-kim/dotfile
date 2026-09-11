@@ -36,7 +36,13 @@ require('lazy').setup(
       config = function()
         require('telescope').setup()
         require('telescope').load_extension('file_browser')
+        require('telescope').load_extension('git_worktree')
       end,
+    },
+    {
+      'polarmutex/git-worktree.nvim',
+      dependencies = { 'nvim-lua/plenary.nvim' },
+      config = function() require('config.worktree') end,
     },
 
     { 'folke/which-key.nvim', event = 'VeryLazy' },

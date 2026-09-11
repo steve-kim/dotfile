@@ -8,6 +8,7 @@ vim.opt.expandtab  = true
 vim.opt.tabstop    = 4
 vim.opt.shiftwidth = 4
 vim.opt.hidden     = true
+vim.opt.autoread   = true
 vim.opt.signcolumn = 'yes'
 vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'rust', 'c', 'cpp', 'lua', 'python', 'toml' },

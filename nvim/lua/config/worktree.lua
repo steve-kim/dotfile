@@ -70,13 +70,29 @@ local function pick_worktree_to_delete()
         require('telescope.actions').close(prompt_bufnr)
         local path = sel.value.path
         local bazel_base = get_bazel_output_base(path)
-        require('git-worktree').delete_worktree(path)
-        if bazel_base and bazel_base ~= '' then
-          vim.schedule(function()
-            vim.fn.system(string.format('rm -rf "%s"', bazel_base))
-            vim.notify('Cleaned Bazel output base: ' .. bazel_base)
-          end)
+        local function do_delete(force)
+          require('git-worktree').delete_worktree(path, force, {
+            on_success = function()
+              vim.schedule(function()
+                if bazel_base and bazel_base ~= '' then
+                  vim.fn.system(string.format('rm -rf "%s"', bazel_base))
+                  vim.notify('Cleaned Bazel output base: ' .. bazel_base)
+                end
+              end)
+            end,
+            on_failure = function()
+              vim.schedule(function()
+                local ans = vim.fn.input('Worktree has uncommitted changes. Force delete? [y/n]: ')
+                if ans == 'y' then
+                  do_delete(true)
+                else
+                  vim.notify('Worktree deletion cancelled.', vim.log.levels.WARN)
+                end
+              end)
+            end,
+          })
         end
+        do_delete(false)
       end)
       return true
     end,

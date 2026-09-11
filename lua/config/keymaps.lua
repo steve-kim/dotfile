@@ -19,6 +19,9 @@ map('n', '<leader>fe', '<Cmd>Telescope file_browser<CR>')
 map('n', '<leader>fk', '<Cmd>Telescope keymaps<CR>')
 
 -- Worktrees
-map('n', '<leader>ww', '<Cmd>Telescope git_worktree git_worktrees<CR>')
-map('n', '<leader>wc', '<Cmd>Telescope git_worktree create_git_worktree<CR>')
+map('n', '<leader>ww', '<Cmd>Telescope git_worktree git_worktree<CR>', { desc = 'Switch worktree' })
+map('n', '<leader>wc', function()
+  local main = vim.fn.system('git worktree list --porcelain | head -1'):match('worktree (.+)\n')
+  require('telescope').extensions.git_worktree.create_git_worktree({ cwd = main })
+end, { desc = 'Create worktree' })
 -- <leader>wo registered in worktree.lua

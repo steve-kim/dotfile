@@ -1,3 +1,9 @@
+vim.opt.sessionoptions = 'buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
+
+vim.api.nvim_create_autocmd('VimLeave', {
+  callback = function() vim.cmd('mksession! Session.vim') end,
+})
+
 vim.opt.expandtab  = true
 vim.opt.tabstop    = 4
 vim.opt.shiftwidth = 4

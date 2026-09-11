@@ -42,6 +42,11 @@ link() {
   ln -sfn "$src" "$dst"
 }
 
+# TPM (Tmux Plugin Manager)
+if [[ ! -d "$HOME/.tmux/plugins/tpm" ]]; then
+  git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
+fi
+
 link "$DOTFILES/nvim"                 "$HOME/.config/nvim"
 link "$DOTFILES/tmux"                 "$HOME/.config/tmux"
 link "$DOTFILES/bin/tmux-sessionizer" "$HOME/.local/bin/tmux-sessionizer"

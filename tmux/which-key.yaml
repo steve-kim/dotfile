@@ -307,7 +307,7 @@ items:
     key: f
     command: "run-shell ~/.local/bin/tmux-sessionizer #{pane_current_path}"
   - name: Pick layout
-    key: l
+    key: W
     command: "display-popup -E ~/.local/bin/tmux-layout"
   - separator: true
   - name: Time

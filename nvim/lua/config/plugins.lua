@@ -8,7 +8,7 @@ require('lazy').setup(
   {
     -- LSP (non-lazy: needed at startup)
     { 'neovim/nvim-lspconfig' },
-    { 'j-hui/fidget.nvim' },
+    { 'j-hui/fidget.nvim', config = true },
 
     -- Treesitter (lazy: config runs when plugin loads)
     {

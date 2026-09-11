@@ -108,6 +108,13 @@ items:
   - name: +Panes
     key: p
     menu:
+      - name: Split horizontal
+        key: "|"
+        command: "split-window -h -c #{pane_current_path}"
+      - name: Split vertical
+        key: "-"
+        command: "split-window -v -c #{pane_current_path}"
+      - separator: true
       - name: Last
         key: tab
         command: lastp
@@ -265,9 +272,34 @@ items:
       - name: Customize
         key: ','
         command: customize-mode -Z
+  - name: Zoom pane
+    key: z
+    command: resize-pane -Z
+  - name: Split horizontal
+    key: "|"
+    command: "split-window -h -c #{pane_current_path}"
+  - name: Split vertical
+    key: "-"
+    command: "split-window -v -c #{pane_current_path}"
   - name: Reload config
     key: r
     command: "source-file ~/.config/tmux/tmux.conf"
+  - name: Resize left
+    key: H
+    command: resize-pane -L 5
+    transient: true
+  - name: Resize down
+    key: J
+    command: resize-pane -D 5
+    transient: true
+  - name: Resize up
+    key: K
+    command: resize-pane -U 5
+    transient: true
+  - name: Resize right
+    key: L
+    command: resize-pane -R 5
+    transient: true
   - name: +Worktrees
     key: f
     command: "run-shell '~/.local/bin/tmux-sessionizer #{pane_current_path}'"

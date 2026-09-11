@@ -34,7 +34,11 @@ require('lazy').setup(
         'nvim-telescope/telescope-file-browser.nvim',
       },
       config = function()
-        require('telescope').setup()
+        require('telescope').setup({
+          defaults = {
+            git_timeout = 15000,
+          },
+        })
         require('telescope').load_extension('file_browser')
         require('telescope').load_extension('git_worktree')
       end,

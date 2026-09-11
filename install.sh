@@ -18,20 +18,21 @@ case "$PKG" in
     command -v brew &>/dev/null || \
       /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     brew install neovim tmux fzf tree-sitter ripgrep
+    brew install --cask ghostty
     ;;
   apt)
-    sudo apt update && sudo apt install -y neovim tmux fzf ripgrep
+    sudo apt update && sudo apt install -y neovim tmux fzf ripgrep alacritty
     command -v tree-sitter &>/dev/null || cargo install tree-sitter-cli
     ;;
   dnf)
-    sudo dnf install -y neovim tmux fzf ripgrep
+    sudo dnf install -y neovim tmux fzf ripgrep alacritty
     command -v tree-sitter &>/dev/null || cargo install tree-sitter-cli
     ;;
   pacman)
-    sudo pacman -S --noconfirm neovim tmux fzf ripgrep tree-sitter
+    sudo pacman -S --noconfirm neovim tmux fzf ripgrep tree-sitter alacritty
     ;;
   *)
-    echo "Unknown package manager — install neovim, tmux, fzf, ripgrep, tree-sitter manually"
+    echo "Unknown package manager — install neovim, tmux, fzf, ripgrep, tree-sitter, alacritty manually"
     ;;
 esac
 
@@ -50,6 +51,12 @@ fi
 link "$DOTFILES/nvim"                 "$HOME/.config/nvim"
 link "$DOTFILES/tmux"                 "$HOME/.config/tmux"
 link "$DOTFILES/bin/tmux-sessionizer" "$HOME/.local/bin/tmux-sessionizer"
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  link "$DOTFILES/terminal/ghostty" "$HOME/.config/ghostty"
+else
+  link "$DOTFILES/terminal/alacritty" "$HOME/.config/alacritty"
+fi
 chmod +x "$HOME/.local/bin/tmux-sessionizer"
 
 echo ""

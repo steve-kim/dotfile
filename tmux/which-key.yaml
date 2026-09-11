@@ -272,6 +272,9 @@ items:
       - name: Customize
         key: ','
         command: customize-mode -Z
+  - name: Kill window
+    key: q
+    command: confirm-before -p "Kill window? (y/n)" kill-window
   - name: Zoom pane
     key: z
     command: resize-pane -Z
@@ -302,7 +305,10 @@ items:
     transient: true
   - name: +Worktrees
     key: f
-    command: "run-shell '~/.local/bin/tmux-sessionizer #{pane_current_path}'"
+    command: "run-shell ~/.local/bin/tmux-sessionizer #{pane_current_path}"
+  - name: Pick layout
+    key: l
+    command: "display-popup -E ~/.local/bin/tmux-layout"
   - separator: true
   - name: Time
     key: T

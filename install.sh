@@ -51,6 +51,7 @@ fi
 link "$DOTFILES/nvim"                 "$HOME/.config/nvim"
 link "$DOTFILES/tmux"                 "$HOME/.config/tmux"
 link "$DOTFILES/bin/tmux-sessionizer" "$HOME/.local/bin/tmux-sessionizer"
+link "$DOTFILES/bin/tmux-layout"      "$HOME/.local/bin/tmux-layout"
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   link "$DOTFILES/terminal/ghostty" "$HOME/.config/ghostty"

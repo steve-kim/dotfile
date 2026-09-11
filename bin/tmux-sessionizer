@@ -24,12 +24,5 @@ existing=$(tmux list-windows -F '#{window_index} #{window_start_path}' 2>/dev/nu
 if [[ -n "$existing" ]]; then
   tmux select-window -t "$existing"
 else
-  # Create window with nvim in the main pane (55% width)
-  tmux new-window -c "$selected" -n "$(basename "$selected")" 'nvim'
-  # Split right for claude (45% width)
-  tmux split-window -h -p 45 -c "$selected" 'claude'
-  # Split the right pane: terminal takes bottom 25%
-  tmux split-window -v -p 25 -c "$selected"
-  # Focus back on nvim (pane 0)
-  tmux select-pane -t 0
+  tmux new-window -c "$selected" -n "$(basename "$selected")"
 fi

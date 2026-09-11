@@ -51,41 +51,6 @@ require('lazy').setup(
 
     { 'christoomey/vim-tmux-navigator' },
 
-    -- AI
-    {
-      'olimorris/codecompanion.nvim',
-      dependencies = {
-        'nvim-lua/plenary.nvim',
-        'nvim-treesitter/nvim-treesitter',
-      },
-      config = function()
-        local adapter
-        if vim.env.AWS_ACCESS_KEY_ID or vim.env.AWS_PROFILE then
-          adapter = 'bedrock'
-        elseif vim.env.ANTHROPIC_API_KEY then
-          adapter = 'anthropic'
-        else
-          adapter = nil
-          vim.notify('CodeCompanion: no AI credentials found. Set ANTHROPIC_API_KEY or AWS credentials to enable.', vim.log.levels.WARN)
-        end
-
-        require('codecompanion').setup({
-          adapters = {
-            bedrock = function()
-              return require('codecompanion.adapters').extend('bedrock', {
-                schema = {
-                  model = { default = 'anthropic.claude-sonnet-4-5' },
-                },
-              })
-            end,
-          },
-          strategies = {
-            chat   = { adapter = adapter or 'anthropic' },
-            inline = { adapter = adapter or 'anthropic' },
-          },
-        })
-      end,
-    },
     { 'folke/which-key.nvim', event = 'VeryLazy' },
 
     -- UI (non-lazy)

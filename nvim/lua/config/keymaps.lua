@@ -18,11 +18,6 @@ map('n', '<leader>fs', '<Cmd>Telescope lsp_document_symbols<CR>')
 map('n', '<leader>fe', '<Cmd>Telescope file_browser<CR>')
 map('n', '<leader>fk', '<Cmd>Telescope keymaps<CR>')
 
--- CodeCompanion
-map({ 'n', 'v' }, '<leader>cc', '<Cmd>CodeCompanion<CR>',     { desc = 'CodeCompanion inline' })
-map({ 'n', 'v' }, '<leader>ca', '<Cmd>CodeCompanionChat<CR>', { desc = 'CodeCompanion chat' })
-map('n',          '<leader>ct', '<Cmd>CodeCompanionChat Toggle<CR>', { desc = 'Toggle chat' })
-
 -- Worktrees
 map('n', '<leader>ww', '<Cmd>Telescope git_worktree git_worktree<CR>', { desc = 'Switch worktree' })
 map('n', '<leader>wc', function()

@@ -1,7 +1,27 @@
 vim.opt.sessionoptions = 'buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
 
+local function session_file()
+  local session_dir = vim.fn.stdpath('data') .. '/sessions'
+  local name = vim.fn.getcwd():gsub('/', '%%')
+  return session_dir .. '/' .. name .. '.vim'
+end
+
+vim.api.nvim_create_autocmd('VimEnter', {
+  once = true,
+  callback = function()
+    local f = session_file()
+    if vim.fn.filereadable(f) == 1 and vim.fn.argc() == 0 then
+      vim.cmd('source ' .. f)
+    end
+  end,
+})
+
 vim.api.nvim_create_autocmd('VimLeave', {
-  callback = function() vim.cmd('mksession! Session.vim') end,
+  callback = function()
+    local session_dir = vim.fn.stdpath('data') .. '/sessions'
+    vim.fn.mkdir(session_dir, 'p')
+    vim.cmd('mksession! ' .. session_file())
+  end,
 })
 
 vim.opt.expandtab  = true

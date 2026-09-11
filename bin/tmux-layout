@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# Fuzzy-pick a pane layout and apply it to the current window.
+
+LAYOUTS="claude: nvim + claude + terminal
+dev: nvim top, terminal bottom
+terminal: plain shell"
+
+selected=$(echo "$LAYOUTS" | fzf --prompt='layout> ' --height=40% --reverse | awk -F: '{print $1}' | tr -d ' ')
+[[ -z "$selected" ]] && exit 0
+
+pane_path="$(tmux display-message -p '#{pane_current_path}')"
+
+# Find the nvim pane (prefer it as the base)
+nvim_pane=$(tmux list-panes -F '#{pane_index} #{pane_current_command}' | awk '$2 == "nvim" {print $1; exit}')
+
+# Gracefully exit claude panes
+for pane in $(tmux list-panes -F '#{pane_index} #{pane_current_command}' | awk '$2 == "claude" {print $1}'); do
+  tmux send-keys -t "$pane" q Enter
+  sleep 0.2
+done
+
+# Kill all panes except nvim (or pane 0 if no nvim)
+base="${nvim_pane:-0}"
+tmux select-pane -t "$base"
+for pane in $(tmux list-panes -F '#{pane_index}' | sort -rn); do
+  [ "$pane" != "$base" ] && tmux kill-pane -t "$pane"
+done
+
+case "$selected" in
+  claude)
+    [ -z "$nvim_pane" ] && tmux send-keys 'nvim' Enter
+    tmux split-window -h -p 45 -c "$pane_path" 'claude'
+    tmux split-window -v -p 25 -c "$pane_path"
+    tmux select-pane -t 0
+    ;;
+  dev)
+    [ -z "$nvim_pane" ] && tmux send-keys 'nvim' Enter
+    tmux split-window -v -p 25 -c "$pane_path"
+    tmux select-pane -t 0
+    ;;
+  terminal)
+    # plain window, nothing to do
+    ;;
+esac

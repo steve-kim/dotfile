@@ -11,7 +11,7 @@ vim.api.nvim_create_autocmd('VimEnter', {
   callback = function()
     local f = session_file()
     if vim.fn.filereadable(f) == 1 and vim.fn.argc() == 0 then
-      vim.cmd('source ' .. f)
+      vim.cmd('source ' .. vim.fn.fnameescape(f))
     end
   end,
 })
@@ -20,7 +20,11 @@ vim.api.nvim_create_autocmd('VimLeave', {
   callback = function()
     local session_dir = vim.fn.stdpath('data') .. '/sessions'
     vim.fn.mkdir(session_dir, 'p')
-    vim.cmd('mksession! ' .. session_file())
+    local f = session_file()
+    local ok, err = pcall(vim.cmd, 'mksession! ' .. vim.fn.fnameescape(f))
+    if not ok then
+      vim.notify('Session save failed: ' .. err, vim.log.levels.ERROR)
+    end
   end,
 })
 

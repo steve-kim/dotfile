@@ -43,13 +43,13 @@ link() {
   ln -sfn "$src" "$dst"
 }
 
-# TPM (Tmux Plugin Manager)
-if [[ ! -d "$HOME/.tmux/plugins/tpm" ]]; then
-  git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
-fi
-
 link "$DOTFILES/nvim"                 "$HOME/.config/nvim"
 link "$DOTFILES/tmux"                 "$HOME/.config/tmux"
+
+# TPM (Tmux Plugin Manager) — must come after tmux symlink is created
+if [[ ! -d "$HOME/.config/tmux/plugins/tpm" ]]; then
+  git clone https://github.com/tmux-plugins/tpm "$HOME/.config/tmux/plugins/tpm"
+fi
 link "$DOTFILES/bin/tmux-sessionizer" "$HOME/.local/bin/tmux-sessionizer"
 link "$DOTFILES/bin/tmux-layout"      "$HOME/.local/bin/tmux-layout"
 
@@ -62,6 +62,7 @@ chmod +x "$HOME/.local/bin/tmux-sessionizer"
 
 echo ""
 echo "Done. Next steps:"
-echo "  1. Open nvim and run :Lazy sync"
-echo "  2. Install LSP servers per project (rust-analyzer, clangd, pyright)"
-echo "  3. Set SESSIONIZER_PATH in ~/.zshrc if your projects are not in ~/code"
+echo "  1. Start tmux and press <prefix>I to install plugins"
+echo "  2. Open nvim and run :Lazy sync"
+echo "  3. Install LSP servers per project (rust-analyzer, clangd, pyright)"
+echo "  4. Set SESSIONIZER_PATH in ~/.zshrc if your projects are not in ~/code"

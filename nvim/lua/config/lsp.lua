@@ -32,19 +32,21 @@ vim.api.nvim_create_autocmd('VimEnter', {
   end,
 })
 
-local on_attach = function(_, bufnr)
-  local map = function(keys, fn) vim.keymap.set('n', keys, fn, { buffer = bufnr, silent = true }) end
-  map('gd',         vim.lsp.buf.definition)
-  map('gt',         vim.lsp.buf.type_definition)
-  map('gi',         vim.lsp.buf.implementation)
-  map('gr',         vim.lsp.buf.references)
-  map('K',          vim.lsp.buf.hover)
-  map('GA',         vim.lsp.buf.code_action)
-  map('<leader>rn', vim.lsp.buf.rename)
-  map('<leader>e',  vim.diagnostic.open_float)
-end
-
-vim.lsp.config('*', { on_attach = on_attach })
+vim.api.nvim_create_autocmd('LspAttach', {
+  callback = function(args)
+    local map = function(keys, fn, desc)
+      vim.keymap.set('n', keys, fn, { buffer = args.buf, silent = true, desc = desc })
+    end
+    map('gd',         vim.lsp.buf.definition,      'Go to definition')
+    map('gt',         vim.lsp.buf.type_definition,  'Go to type definition')
+    map('gi',         vim.lsp.buf.implementation,   'Go to implementation')
+    map('gr',         vim.lsp.buf.references,       'Go to references')
+    map('K',          vim.lsp.buf.hover,            'Hover docs')
+    map('GA',         vim.lsp.buf.code_action,      'Code action')
+    map('<leader>rn', vim.lsp.buf.rename,           'Rename symbol')
+    map('<leader>e',  vim.diagnostic.open_float,    'Open diagnostic')
+  end,
+})
 
 vim.lsp.config('rust_analyzer', {
   settings = {

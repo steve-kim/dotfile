@@ -56,8 +56,9 @@ if command -v tmux &>/dev/null; then
   "$HOME/.config/tmux/plugins/tpm/bin/install_plugins"
 fi
 
-# Build which-key menu from config
-if [[ -f "$HOME/.config/tmux/plugins/tmux-which-key/plugin.sh.tmux" ]]; then
+# Link which-key config and build menu
+if [[ -d "$HOME/.config/tmux/plugins/tmux-which-key" ]]; then
+  ln -sfn "$DOTFILES/tmux/which-key.yaml" "$HOME/.config/tmux/plugins/tmux-which-key/config.yaml"
   bash "$HOME/.config/tmux/plugins/tmux-which-key/plugin.sh.tmux"
 fi
 link "$DOTFILES/bin/tmux-sessionizer" "$HOME/.local/bin/tmux-sessionizer"
